@@ -16,8 +16,8 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
-    env_file:
-      - ./.env
+    #  env_file: #uncomment if needed to run docker locally
+    #    - ./.env
     depends_on:
       - db
   db:
