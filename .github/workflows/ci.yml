@@ -24,6 +24,14 @@ jobs:
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
 
+      - name: Build the Docker image
+        run: |
+          docker build --target build-stage -t myapp-frontend:test .
+
+      - name: Run frontend tests
+        run: |
+          docker run myapp-frontend:test npm test
+
       - name: Run frontend tests
         run: |
           docker-compose exec -T frontend npm test
