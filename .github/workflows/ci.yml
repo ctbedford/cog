@@ -2,9 +2,9 @@ name: Continuous Integration and Deployment
 
 on:
   push:
-    branches: [master]
+    branches: [main, master]
   pull_request:
-    branches: [master]
+    branches: [main, master]
 
 jobs:
   build:
@@ -12,20 +12,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
       - name: Set up Python 3.9
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
-
       - name: Install dependencies
         run: |
           pip install pipenv
-          cd backend && pipenv install --deploy
-
+          cd backend && pipenv install --deploy --ignore-pipfile
       - name: Run tests
         run: |
           cd backend && pipenv run python manage.py test
-
-    # Add steps for building Docker images, pushing to registry,
-    # and deploying to your server or cloud provider here.
+      # Add more steps for Docker build, push to registry, and deploy to server or cloud provider
