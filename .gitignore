@@ -209,8 +209,8 @@ $RECYCLE.BIN/
 *.lnk
 
 # Docker
-**/Dockerfile
-**/docker-compose*.yml
+#**/Dockerfile
+#**/docker-compose*.yml
 .dockerignore
 # Exclude commonly ignored Docker container volumes
 **/data/
