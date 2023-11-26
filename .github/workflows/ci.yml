@@ -19,7 +19,6 @@ jobs:
           POSTGRES_DB: dbname
         ports:
           - 5432:5432
-        # Set up other services like Redis if needed.
 
     steps:
       - uses: actions/checkout@v2
@@ -29,15 +28,30 @@ jobs:
         with:
           python-version: 3.9
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: |
           python -m venv venv
           source venv/bin/activate
           pip install -r backend/requirements.txt
 
-      - name: Run tests
+      - name: Run Django tests
         run: |
           source venv/bin/activate
           python backend/manage.py test
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install npm dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Run Jest tests
+        run: |
+          cd frontend
+          npm test
 
       # Add steps for building Docker images, pushing to registry, and deploying.
