@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install pipenv
-          cd backend && pipenv install --deploy --ignore-pipfile
+          cd backend && pipenv install --deploy
 
       - name: Run tests
         run: |
