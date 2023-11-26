@@ -27,3 +27,5 @@ EXPOSE 80
 
 # The default command to run when starting the container
 CMD ["nginx", "-g", "daemon off;"]
+
+#test
