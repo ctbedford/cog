@@ -18,6 +18,9 @@ jobs:
         with:
           python-version: 3.9
 
+      - name: List directories
+        run: ls -la
+
       - name: Install dependencies
         run: |
           python -m venv venv
