@@ -31,7 +31,7 @@ const rootReducer = (state = initialState, action: MyAction) => {
 
 const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(thunk))
+  composeWithDevTools(applyMiddleware(thunk)),
 );
 
 export default store;
