@@ -39,6 +39,11 @@ jobs:
         run: |
           docker-compose ps
 
+      - name: Debug the container
+        run: |
+          docker-compose exec -T frontend sh -c "which npm || echo 'npm not found'"
+          docker-compose exec -T frontend sh -c "npm -v || echo 'npm version command failed'"
+
       - name: Run Django tests
         run: |
           docker-compose exec -T backend python manage.py test --verbosity=2
