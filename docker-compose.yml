@@ -39,5 +39,17 @@ services:
       - NODE_ENV=production
     command: nginx -g 'daemon off;'
 
+  test:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.test
+    volumes:
+      - ./frontend:/frontend
+    working_dir: /frontend
+    command: npm test
+    depends_on:
+      - backend
+      - db
+
 volumes:
   postgres_data:

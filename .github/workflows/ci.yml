@@ -35,25 +35,8 @@ jobs:
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
 
-      - name: Check the containers are running
-        run: |
-          docker-compose ps
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Run Frontend Tests
-        run: npm test
-
-      - name: Debug the container
-        run: |
-          docker-compose exec -T frontend sh -c "which npm || echo 'npm not found'"
-          docker-compose exec -T frontend sh -c "npm -v || echo 'npm version command failed'"
+      - name: Run frontend tests
+        run: docker-compose -f docker-compose.yml run test
 
       - name: Run Django tests
         run: |
