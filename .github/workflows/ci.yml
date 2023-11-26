@@ -24,9 +24,9 @@ jobs:
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
 
-      - name: Run Django tests
+      - name: Run frontend tests
         run: |
-          docker-compose exec -T backend python manage.py test --verbosity=2
+          docker-compose exec -T frontend npm test
 
       - name: Start the Docker Compose stack
         run: |
@@ -48,9 +48,9 @@ jobs:
           docker-compose exec -T frontend sh -c "which npm || echo 'npm not found'"
           docker-compose exec -T frontend sh -c "npm -v || echo 'npm version command failed'"
 
-      - name: Run frontend tests
+      - name: Run Django tests
         run: |
-          docker-compose exec -T frontend npm test
+          docker-compose exec -T backend python manage.py test --verbosity=2
 
       - name: Shutdown
         run: |
