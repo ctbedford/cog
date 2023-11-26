@@ -10,54 +10,37 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:12
-        env:
-          POSTGRES_USER: user
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: dbname
-        ports:
-          - 5432:5432
-
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Python 3.9
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-
-      - name: Install Python dependencies
+      - name: Set up Docker Compose
         run: |
-          python -m venv venv
-          source venv/bin/activate
-          pip install -r backend/requirements.txt
+          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose --version
+
+      - name: Build the Docker Compose stack
+        run: |
+          docker-compose build
+
+      - name: Start the Docker Compose stack
+        run: |
+          docker-compose up -d
+
+      - name: Check the containers are running
+        run: |
+          docker-compose ps
 
       - name: Run Django tests
         run: |
-          source venv/bin/activate
-          python backend/manage.py test --verbosity=2
-        env:
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          DEBUG: ${{ secrets.DEBUG }}
+          docker-compose exec -T backend python manage.py test --verbosity=2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-
-      - name: Install npm dependencies
+      - name: Run frontend tests
         run: |
-          cd frontend
-          npm install
+          docker-compose exec -T frontend npm test
 
-      - name: Run Jest tests
+      - name: Shutdown
         run: |
-          cd frontend
-          npm test
+          docker-compose down
 
-      # Add steps for building Docker images, pushing to registry, and deploying.
+    # Add steps for building Docker images, pushing to registry, and deploying.
