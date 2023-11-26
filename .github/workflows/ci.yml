@@ -13,6 +13,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Install Node.js for running tests
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
       - name: Set up Docker Compose
         run: |
           docker-compose -f docker-compose.yml build
@@ -23,14 +28,6 @@ jobs:
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-
-      - name: Build the Docker image
-        run: |
-          docker build --target build-stage -t myapp-frontend:test .
-
-      - name: Run frontend tests
-        run: |
-          docker run myapp-frontend:test npm test
 
       - name: Run frontend tests
         run: |
