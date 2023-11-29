@@ -37,6 +37,9 @@ services:
       - '3000:80'
     environment:
       - NODE_ENV=production
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     command: nginx -g 'daemon off;'
 
   test:
