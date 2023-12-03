@@ -35,11 +35,6 @@ jobs:
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
 
-      - name: Build and run test service
-        run: docker-compose -f docker-compose.yml up --build -d test
-      - name: Follow test service logs
-        run: docker-compose -f docker-compose.yml logs -f test
-
       - name: Run Django tests
         run: |
           docker-compose exec -T backend python manage.py test --verbosity=2

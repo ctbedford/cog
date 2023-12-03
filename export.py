@@ -37,7 +37,7 @@ def main():
     directories_to_exclude = {
         '__pycache__', 'node_modules', '.git', 
         'build', 'dist', 'coverage', 'migrations', 
-        'env', 'venv', '.vscode', '.idea'
+        'env', 'venv', '.vscode', '.idea', 'static'
     }
 
     # List all relevant files

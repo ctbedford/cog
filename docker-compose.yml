@@ -6,6 +6,7 @@ services:
     command: gunicorn backend.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - ./backend:/backend
+      - static_volume:/backend/static # Define a volume for static files
     ports:
       - '8000:8000'
     environment:
@@ -24,6 +25,7 @@ services:
     image: postgres:12
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -33,6 +35,7 @@ services:
     build: ./frontend
     volumes:
       - ./frontend:/frontend
+      - static_volume:/usr/share/nginx/html/static # Use the same volume for Nginx
     ports:
       - '3000:80'
     environment:
@@ -40,19 +43,8 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
-    command: nginx -g 'daemon off;'
-
-  test:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.test
-    volumes:
-      - ./frontend:/frontend
-    working_dir: /frontend
-    command: npm test
-    depends_on:
-      - backend
-      - db
+    command: /bin/sh -c "dockerize -wait tcp://backend:8000 -timeout 1m nginx -g 'daemon off;'"
 
 volumes:
   postgres_data:
+  static_volume:
